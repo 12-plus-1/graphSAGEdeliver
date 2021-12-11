@@ -84,12 +84,12 @@ def run_cora():
     rand_indices = np.random.permutation(num_nodes)
     test = rand_indices[:1000]
     val = rand_indices[1000:1300]
-    train = list(rand_indices[1300:])
+    train = list(rand_indices)
 
     optimizer = torch.optim.SGD(filter(lambda p : p.requires_grad, graphsage.parameters()), lr=0.05)
     times = []
     start = time.time()
-    for batch in range(400):
+    for batch in range(800):
         batch_nodes = train[:140]
         random.shuffle(train)
         start_time = time.time()
