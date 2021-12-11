@@ -83,13 +83,14 @@ def run_cora():
 #    graphsage.cuda()
     rand_indices = np.random.permutation(num_nodes)
     test = rand_indices[:1000]
-    val = rand_indices[1000:1500]
-    train = list(rand_indices[1500:])
+    val = rand_indices[1000:1300]
+    train = list(rand_indices[1300:])
 
-    optimizer = torch.optim.SGD(filter(lambda p : p.requires_grad, graphsage.parameters()), lr=0.7)
+    optimizer = torch.optim.SGD(filter(lambda p : p.requires_grad, graphsage.parameters()), lr=0.05)
     times = []
-    for batch in range(100):
-        batch_nodes = train[:256]
+    start = time.time()
+    for batch in range(400):
+        batch_nodes = train[:140]
         random.shuffle(train)
         start_time = time.time()
         optimizer.zero_grad()
@@ -100,10 +101,13 @@ def run_cora():
         end_time = time.time()
         times.append(end_time-start_time)
         # print batch, loss.data[0]
-
+    
+    end = time.time()
+    runTime = end - start
     val_output = graphsage.forward(val) 
     print "Validation F1:", f1_score(labels[val], val_output.data.numpy().argmax(axis=1), average="micro")
     print "Average batch time:", np.mean(times)
+    print "running time", runTime
 
 def load_pubmed():
     #hardcoded for simplicity...
@@ -178,8 +182,5 @@ def run_pubmed():
     print "Average batch time:", np.mean(times)
 
 if __name__ == "__main__":
-    start = time.time()
     run_cora()
-    end = time.time()
-    runTime = end - start
-    print runTime
+
