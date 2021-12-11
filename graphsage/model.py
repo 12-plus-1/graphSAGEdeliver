@@ -178,4 +178,6 @@ def run_pubmed():
     print "Average batch time:", np.mean(times)
 
 if __name__ == "__main__":
+    print time.time
     run_cora()
+    print time.time
